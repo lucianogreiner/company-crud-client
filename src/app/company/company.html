@@ -1,0 +1,73 @@
+<div>
+<h1>Companies</h1>
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Email</th>
+			<th>City</th>
+			<th>Country</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="company in crud.list">
+			<td>{{company.name}}</td>
+			<td>{{company.email}}</td>
+			<td>{{company.address.city}}</td>
+			<td>{{company.address.country}}</td>
+			<td><button ng-click="crud.edit(company.id)">Edit</button></td>
+		</tr>
+	</tbody>	
+</table>
+</div>
+<div ng-if="crud.editMode">
+	<h2>Edit Company</h2>
+	<form>
+		<fieldset>
+			<label for="name">Company name:</label>
+			<input type="text" name="name" ng-model="crud.company.name"/>
+		</fieldset>
+		<fieldset>
+			<label for="name">Company e-mail:</label>
+			<input type="text" name="name" ng-model="crud.company.email"/>
+		</fieldset>
+		<fieldset>
+			<label for="name">Company phone:</label>
+			<input type="text" name="name" ng-model="crud.company.phone"/>
+		</fieldset>
+		<h3>Address</h3>
+		<fieldset>
+			<label for="name">Street:</label>
+			<input type="text" name="name" ng-model="crud.company.address.street"/>
+		</fieldset>
+		<fieldset>
+			<label for="name">City:</label>
+			<input type="text" name="name" ng-model="crud.company.address.city"/>
+		</fieldset>
+		<fieldset>
+			<label for="name">Country:</label>
+			<input type="text" name="name" ng-model="crud.company.address.country"/>
+		</fieldset>
+		<h3>Owners</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Owner name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="owner in crud.company.owners">
+					<td>{{owner}}</td>
+				</tr>
+			</tbody>
+		</table>
+		<fieldset>
+			<label for="name">Add owner:</label>
+			<input type="text" name="name" ng-model="owner"/>
+			<button ng-click="crud.addOwner(owner)">Add</button>
+		</fieldset>
+		<button ng-click="crud.save()">Salvar</button>
+		<button ng-click="crud.cancel()">Cancelar</button>
+	</form>
+</div>
