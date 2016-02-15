@@ -25,7 +25,7 @@
 		if(company.id) {
 			return $http.put(baseUrl(company.id), company);
 		}
-		return $http.post(baseUrl, company);
+		return $http.post(baseUrl(), company);
 	}
 	
 	function loadCompany(companyId) {

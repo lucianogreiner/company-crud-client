@@ -1,73 +1,126 @@
-<div>
-<h1>Companies</h1>
-<table>
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Email</th>
-			<th>City</th>
-			<th>Country</th>
-			<th>Action</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="company in crud.list">
-			<td>{{company.name}}</td>
-			<td>{{company.email}}</td>
-			<td>{{company.address.city}}</td>
-			<td>{{company.address.country}}</td>
-			<td><button ng-click="crud.edit(company.id)">Edit</button></td>
-		</tr>
-	</tbody>	
-</table>
-</div>
-<div ng-if="crud.editMode">
-	<h2>Edit Company</h2>
-	<form>
-		<fieldset>
-			<label for="name">Company name:</label>
-			<input type="text" name="name" ng-model="crud.company.name"/>
-		</fieldset>
-		<fieldset>
-			<label for="name">Company e-mail:</label>
-			<input type="text" name="name" ng-model="crud.company.email"/>
-		</fieldset>
-		<fieldset>
-			<label for="name">Company phone:</label>
-			<input type="text" name="name" ng-model="crud.company.phone"/>
-		</fieldset>
-		<h3>Address</h3>
-		<fieldset>
-			<label for="name">Street:</label>
-			<input type="text" name="name" ng-model="crud.company.address.street"/>
-		</fieldset>
-		<fieldset>
-			<label for="name">City:</label>
-			<input type="text" name="name" ng-model="crud.company.address.city"/>
-		</fieldset>
-		<fieldset>
-			<label for="name">Country:</label>
-			<input type="text" name="name" ng-model="crud.company.address.country"/>
-		</fieldset>
-		<h3>Owners</h3>
-		<table>
-			<thead>
-				<tr>
-					<th>Owner name</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="owner in crud.company.owners">
-					<td>{{owner}}</td>
-				</tr>
-			</tbody>
-		</table>
-		<fieldset>
-			<label for="name">Add owner:</label>
-			<input type="text" name="name" ng-model="owner"/>
-			<button ng-click="crud.addOwner(owner)">Add</button>
-		</fieldset>
-		<button ng-click="crud.save()">Salvar</button>
-		<button ng-click="crud.cancel()">Cancelar</button>
+<md-content layout-padding>
+	<md-toolbar class="md-table-toolbar md-default">
+	  <div class="md-toolbar-tools">
+		<h2>Companies Rest Client</h2>
+	  </div>
+	</md-toolbar>
+</md-content>
+<md-content layout-padding ng-if="!crud.editMode">
+	<md-toolbar class="md-table-toolbar md-default">
+	  <div class="md-toolbar-tools">
+		<span>Companies</span>
+	  </div>
+	</md-toolbar>
+	<md-table-container>
+	  <table md-table md-row-select md-progress="crud.status">
+		<thead md-head>
+		  <tr md-row>
+			<th md-column><span>Name</span></th>
+			<th md-column>E-mail</th>
+			<th md-column>City</th>
+			<th md-column>Country</th>
+			<th md-column>&nbsp;</th>
+		  </tr>
+		</thead>
+		<tbody md-body>
+		  <tr md-row ng-repeat="company in crud.list">
+			<td md-cell>{{company.name}}</td>
+			<td md-cell>{{company.email}}</td>
+			<td md-cell>{{company.address.city}}</td>
+			<td md-cell>{{company.address.country}}</td>
+			<td md-cell><md-button ng-click="crud.edit(company.id)" class="md-raised md-primary">Edit</md-button></td>
+		  </tr>
+		</tbody>
+	  </table>
+	</md-table-container>
+	<md-button ng-click="crud.create()" class="md-raised md-primary">Insert Company</md-button>
+</md-content>
+<md-content layout-padding ng-if="crud.editMode">
+	<md-toolbar class="md-table-toolbar md-default">
+	  <div class="md-toolbar-tools">
+		<span>Company Record</span>
+	  </div>
+	</md-toolbar>
+	<form name="companyForm">
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block" flex-gt-xs>
+				<label>Company name</label>
+				<input md-maxlength="100" required name="name" ng-model="crud.company.name">
+				<div ng-messages="companyForm.name.$error">
+				  <div ng-message="required">This is required.</div>
+				  <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+				</div>
+			</md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+			<md-input-container class="md-block" flex-gt-sm>
+			  <label>Email</label>
+			  <input name="email" ng-model="crud.company.email"
+					 minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+			  <div ng-messages="companyForm.email.$error">
+				<div ng-message-exp="['minlength', 'maxlength', 'pattern']">
+				  Your email must be between 10 and 100 characters long and look like an e-mail address.
+				</div>
+			  </div>
+			</md-input-container>
+			<md-input-container class="md-block" flex-gt-sm>
+			  <label>Phone Number</label>
+			  <input name="phone" ng-model="crud.company.phone" ng-pattern="/^([0-9]{3}) [0-9]{3}-[0-9]{4}$/" />
+			  <div ng-messages="companyForm.phone.$error">
+				<div ng-message="pattern">(###) ###-#### - Please enter a valid phone number.</div>
+			  </div>
+			</md-input-container>
+		</div>
+		<div layout-gt-xs="row">
+			<md-input-container class="md-block" flex-gt-xs>
+				<label>Company street</label>
+				<input md-maxlength="100" required name="street" ng-model="crud.company.address.street">
+				<div ng-messages="companyForm.street.$error">
+				  <div ng-message="required">This is required.</div>
+				  <div ng-message="md-maxlength">The name has to be less than 200 characters long.</div>
+				</div>
+			</md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Company city</label>
+				<input md-maxlength="100" required name="city" ng-model="crud.company.address.city">
+				<div ng-messages="companyForm.city.$error">
+				  <div ng-message="required">This is required.</div>
+				  <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+				</div>
+			</md-input-container>
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Company country</label>
+				<input md-maxlength="100" required name="country" ng-model="crud.company.address.country">
+				<div ng-messages="companyForm.country.$error">
+				  <div ng-message="required">This is required.</div>
+				  <div ng-message="md-maxlength">The name has to be less than 100 characters long.</div>
+				</div>
+			</md-input-container>
+		</div>
+		<md-divider ></md-divider>
+		<div layout-gt-sm="row">
+			<md-subheader class="md-no-sticky">Owners <span ng-if="!crud.company.owners.length">At least one is required!</span></md-subheader>
+			<md-list>
+				<md-list-item ng-repeat="owner in crud.company.owners track by $index">
+					<div class="md-list-item-text" layout="column">
+						<h3>{{owner}}</h3>
+					</div>
+				</md-list-item>
+				<md-divider ></md-divider>
+			</md-list>
+		</div>
+		<div layout-gt-sm="row">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Add owner</label>
+				<input md-maxlength="100" name="owner" ng-model="owner">
+			</md-input-container>
+			<md-button ng-click="crud.addOwner(owner)" class="md-raised md-primary">Add</md-button>
+		</div>
+		
+		
+		<md-button ng-click="crud.save()" class="md-raised md-primary" ng-disabled="companyForm.$invalid || !crud.company.owners.length">Save Company</md-button>
+		<md-button ng-click="crud.cancel()" class="md-raised md-warn">Cancel</md-button>
 	</form>
-</div>
+</md-content>

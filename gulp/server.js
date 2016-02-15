@@ -33,12 +33,14 @@ function browserSyncInit(baseDir, browser) {
    *
    * For more details and option, https://github.com/chimurai/http-proxy-middleware/blob/v0.9.0/README.md
    */
-  server.middleware = proxyMiddleware('/rest/**', {target: 'http://127.0.0.1:8080'});
+  server.middleware = proxyMiddleware('/rest/**', {target: 'http://company-crud.herokuapp.com:80', changeOrigin: true});
 
   browserSync.instance = browserSync.init({
     startPath: '/',
     server: server,
-    browser: browser
+    browser: browser,
+	port : process.env.PORT || 3000,
+	ui : false
   });
 }
 

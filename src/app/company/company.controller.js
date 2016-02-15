@@ -13,9 +13,11 @@
 	vm.list = companies;
 	vm.company = null;
 	
+	vm.status = null;
+	vm.create = createCompany
     vm.save = saveCompany
 	vm.edit = editCompany
-	vm.cancel = cancelCompany;
+	vm.cancel = closeCompanyEditor;
 	vm.addOwner = addCompanyOwner;
 	
 	function saveCompany() {
@@ -23,7 +25,7 @@
 			.saveCompany(vm.company)
 			.then(companySaved, errorHandler);
 		function companySaved() {
-			vm.editMode = false;
+			closeCompanyEditor();
 			reloadCompanies();
 			toastr.info('Company saved!');
 		}
@@ -34,30 +36,47 @@
 			.loadCompany(companyId)
 			.then(companyLoaded, errorHandler);
 		function companyLoaded(company) {
-			vm.editMode = true;
-			vm.company = company;
+			openCompanyEditor(company);
 		}
 	}
 	
-	function cancelCompany() {
+	function createCompany() {
+		openCompanyEditor({});
+	}
+	
+	function openCompanyEditor(company) {
+		vm.editMode = true;
+		vm.company = company;
+	}
+	
+	function closeCompanyEditor() {
 		vm.editMode = false;
 		vm.company = null;
 	}
 	
 	function addCompanyOwner(ownerName) {
+		if(!vm.company.id) {
+			return addToLoadedCompany();
+		}
 		companyService
 			.addCompanyOwner(vm.company.id, ownerName)
 			.then(ownerAdded, errorHandler);
 		function ownerAdded() {
-			vm.company.owners.push(ownerName);
+			addToLoadedCompany();
 			toastr.info('Company owner added!');
+		}
+		function addToLoadedCompany() {
+			if(!vm.company.owners) {
+				vm.company.owners = [];
+			}
+			vm.company.owners.push(ownerName);
 		}
 	}
 	
 	function reloadCompanies() {
-		companyService
-			.listCompanies()
-			.then(companiesLoaded, errorHandler);
+		vm.status = companyService
+					.listCompanies()
+					.then(companiesLoaded, errorHandler);
 		function companiesLoaded(companies) {
 			vm.list = companies;
 		}

@@ -19,7 +19,7 @@ gulp.task('partials', function () {
       quotes: true
     }))
     .pipe($.angularTemplatecache('templateCacheHtml.js', {
-      module: 'agilelink',
+      module: 'company-crud-client',
       root: 'app'
     }))
     .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
