@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {},
   "scripts": {
-    "start" : "gulp serve"
+    "start" : "gulp serve",
     "postinstall": "bower install"
   },
   "devDependencies": {
