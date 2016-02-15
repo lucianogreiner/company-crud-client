@@ -1,4 +1,4 @@
-'use strict';
+1'use strict';
 
 var path = require('path');
 var gulp = require('gulp');
